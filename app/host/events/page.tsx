@@ -26,7 +26,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useSearchParams } from "next/navigation";
-import Loading from "./loading";
 
 interface Event {
   id: string;
