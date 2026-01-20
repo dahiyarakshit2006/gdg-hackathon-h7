@@ -1,4 +1,4 @@
-
+"use client";
 
 import React from "react";
 import { useSearchParams } from "next/navigation";
@@ -582,6 +582,3 @@ export default function ScannerPage() {
   );
 }
 
-export function generateStaticParams() {
-  return [{ lang: "en" }];
-}
