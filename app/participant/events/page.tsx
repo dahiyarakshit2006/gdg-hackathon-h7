@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,6 @@ import {
   Loader2,
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
 
 interface Event {
   id: string;
@@ -45,6 +44,7 @@ interface Event {
   registration_fee: number;
   image_url: string;
   host_id: string;
+  college_id?: string;
   profiles?: { full_name: string };
 }
 
@@ -58,54 +58,88 @@ export default function ParticipantEventsPage() {
   const [category, setCategory] = useState("all");
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [registering, setRegistering] = useState(false);
+
   const supabase = createClient();
   const searchParams = useSearchParams();
-  const [profile,setProfile]= useState<any>(null);
-
 
   useEffect(() => {
     fetchEvents();
-  }, []);
-  // Ye naya block profile data layega
-  useEffect(() => {
-    const getUserProfile = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single();
-        setProfile(data);
-      }
-    };
-    getUserProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchEvents = async () => {
+    setLoading(true);
+
+    // ✅ 1) Get logged in user
     const {
       data: { user },
+      error: userError,
     } = await supabase.auth.getUser();
 
-    // Fetch all upcoming events
-    const { data: eventsData } = await supabase
+    if (userError) {
+      console.log("User Error:", userError);
+      setLoading(false);
+      return;
+    }
+
+    if (!user) {
+      console.log("No user found (not logged in)");
+      setEvents([]);
+      setRegisteredEvents([]);
+      setLoading(false);
+      return;
+    }
+
+    // ✅ 2) Get user's profile -> college_id
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .select("college_id")
+      .eq("id", user.id)
+      .single();
+
+    if (profileError) {
+      console.log("Profile Error:", profileError);
+      setLoading(false);
+      return;
+    }
+
+    if (!profile?.college_id) {
+      console.log("User profile has no college_id");
+      setEvents([]);
+      setRegisteredEvents([]);
+      setLoading(false);
+      return;
+    }
+
+    // ✅ 3) Fetch upcoming events ONLY for same college
+    const { data: eventsData, error: eventsError } = await supabase
       .from("events")
       .select("*, profiles(full_name)")
       .eq("status", "upcoming")
+      .eq("college_id", profile.college_id)
       .gte("event_date", new Date().toISOString())
       .order("event_date", { ascending: true });
 
-    if (eventsData) {
-      setEvents(eventsData);
+    if (eventsError) {
+      console.log("Events Error:", eventsError);
+      setLoading(false);
+      return;
     }
 
-    // Fetch user's registrations
-    if (user) {
-      const { data: regs } = await supabase
-        .from("registrations")
-        .select("event_id")
-        .eq("user_id", user.id)
-        .neq("status", "cancelled");
+    setEvents(eventsData || []);
 
-      if (regs) {
-        setRegisteredEvents(regs.map((r) => r.event_id));
-      }
+    // ✅ 4) Fetch user's registrations
+    const { data: regs, error: regsError } = await supabase
+      .from("registrations")
+      .select("event_id")
+      .eq("user_id", user.id)
+      .neq("status", "cancelled");
+
+    if (regsError) {
+      console.log("Registrations Error:", regsError);
+      setRegisteredEvents([]);
+    } else {
+      setRegisteredEvents((regs || []).map((r: any) => r.event_id));
     }
 
     setLoading(false);
@@ -113,6 +147,7 @@ export default function ParticipantEventsPage() {
 
   const handleRegister = async (event: Event) => {
     setRegistering(true);
+
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -122,7 +157,7 @@ export default function ParticipantEventsPage() {
       return;
     }
 
-    // Generate unique QR code
+    // ✅ Generate unique QR code
     const qrCode = `REG-${event.id.slice(0, 8)}-${user.id.slice(0, 8)}-${Date.now()}`;
 
     const { error } = await supabase.from("registrations").insert({
@@ -133,7 +168,7 @@ export default function ParticipantEventsPage() {
     });
 
     if (!error) {
-      // Update event registration count
+      // ✅ Update event registration count
       await supabase
         .from("events")
         .update({
