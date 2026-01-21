@@ -60,9 +60,22 @@ export default function ParticipantEventsPage() {
   const [registering, setRegistering] = useState(false);
   const supabase = createClient();
   const searchParams = useSearchParams();
+  const [profile,setProfile]= useState<any>(null);
+
 
   useEffect(() => {
     fetchEvents();
+  }, []);
+  // Ye naya block profile data layega
+  useEffect(() => {
+    const getUserProfile = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+        setProfile(data);
+      }
+    };
+    getUserProfile();
   }, []);
 
   const fetchEvents = async () => {
