@@ -126,7 +126,7 @@ export default function ParticipantLayout({
                 <Calendar className="w-5 h-5 text-primary" />
               </div>
               <span className="font-bold text-lg hidden sm:block">
-                CampusHub
+                Planora
               </span>
             </Link>
           </div>

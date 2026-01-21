@@ -105,7 +105,7 @@ export default function HomePage() {
             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
               <Calendar className="w-6 h-6 text-primary" />
             </div>
-            <span className="text-xl font-bold">CampusHub</span>
+            <span className="text-xl font-bold">Planora</span>
           </div>
           <div className="flex items-center gap-3">
             <Link href="/login">
@@ -261,7 +261,7 @@ export default function HomePage() {
               Ready to Transform Your Campus Events?
             </h2>
             <p className="text-muted-foreground mb-8">
-              Join thousands of students and organizers already using CampusHub
+              Join thousands of students and organizers already using Planora
               to create amazing event experiences.
             </p>
             <Link href="/register">
@@ -279,10 +279,10 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Calendar className="w-5 h-5 text-primary" />
-            <span className="font-semibold">CampusHub</span>
+            <span className="font-semibold">Planora</span>
           </div>
           <p className="text-sm text-muted-foreground">
-            2024 CampusHub. All rights reserved.
+            2024 Planora. All rights reserved.
           </p>
         </div>
       </footer>

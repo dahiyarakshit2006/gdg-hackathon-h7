@@ -118,7 +118,7 @@ export default function IDCardPage() {
                 </div>
                 <div>
                   <h2 className="font-bold text-primary-foreground">
-                    CampusHub
+                    Planora
                   </h2>
                   <p className="text-xs text-primary-foreground/80">
                     Event Pass
@@ -214,7 +214,7 @@ export default function IDCardPage() {
                 <QrCode className="w-3 h-3" />
                 Valid for all registered events
               </span>
-              <span>CampusHub 2024</span>
+              <span>Planora 2024</span>
             </div>
           </div>
         </Card>

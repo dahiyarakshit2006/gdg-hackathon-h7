@@ -122,7 +122,7 @@ export default function RegisterPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 mb-4">
             <Calendar className="w-8 h-8 text-primary" />
           </div>
-          <h1 className="text-3xl font-bold text-foreground">CampusHub</h1>
+          <h1 className="text-3xl font-bold text-foreground">Planora</h1>
           <p className="text-muted-foreground mt-2">Create your account</p>
         </div>
 
@@ -130,7 +130,7 @@ export default function RegisterPage() {
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl text-center">Sign Up</CardTitle>
             <CardDescription className="text-center">
-              Join CampusHub to manage and participate in events
+              Join Planora to manage and participate in events
             </CardDescription>
           </CardHeader>
           <CardContent>

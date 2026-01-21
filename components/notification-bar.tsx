@@ -139,7 +139,7 @@ export function NotificationBar() {
             <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
               <span className="text-primary-foreground font-bold text-sm">CH</span>
             </div>
-            <span className="font-semibold text-lg">CampusHub</span>
+            <span className="font-semibold text-lg">Planora</span>
           </div>
 
           <nav className="hidden md:flex items-center gap-6">

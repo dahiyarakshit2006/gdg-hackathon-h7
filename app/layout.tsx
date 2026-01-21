@@ -8,7 +8,7 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'CampusHub - College Event Management',
+  title: 'Planora - College Event Management',
   description: 'Modern college event management system with AI-powered insights, QR check-in, and real-time collaboration',
   generator: 'v0.app',
   icons: {

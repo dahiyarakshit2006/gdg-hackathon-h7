@@ -450,7 +450,7 @@ export default function ScannerPage() {
                         <div className="flex items-center gap-2">
                           <Calendar className="w-5 h-5 text-primary-foreground" />
                           <span className="font-bold text-primary-foreground text-sm">
-                            CampusHub ID Card
+                            Planora ID Card
                           </span>
                         </div>
                       </div>
