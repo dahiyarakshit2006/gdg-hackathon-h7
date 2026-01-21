@@ -82,6 +82,26 @@ export default function ParticipantEventsPage() {
       return;
     }
 
+    // ✅ 2) Fetch profile (college_id)
+const { data: profile, error: profileError } = await supabase
+  .from("profiles")
+  .select("college_id")
+  .eq("id", user.id) // agar tumhare table me user_id hai toh id ki jagah user_id
+  .single();
+
+if (profileError) {
+  console.log("Profile Error:", profileError);
+  setLoading(false);
+  return;
+}
+
+if (!profile?.college_id) {
+  console.log("College ID missing in profile");
+  setLoading(false);
+  return;
+}
+
+
     if (!user) {
       console.log("No user found (not logged in)");
       setEvents([]);
