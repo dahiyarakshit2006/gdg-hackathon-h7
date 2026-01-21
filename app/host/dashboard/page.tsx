@@ -244,7 +244,7 @@ export default function HostDashboard() {
                 </p>
               </div>
               <div className="w-12 h-12 rounded-xl bg-chart-3/10 flex items-center justify-center">
-                <DollarSign className="w-6 h-6 text-chart-3" />
+                <IndianRupee className="w-6 h-6 text-chart-3" />
               </div>
             </div>
             <p className="text-xs text-muted-foreground mt-3">
