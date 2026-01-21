@@ -430,7 +430,7 @@ export default function BudgetPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Allocated Amount ($)</Label>
+                  <Label>Allocated Amount (₹)</Label>
                   <Input
                     type="number"
                     placeholder="0.00"
@@ -613,7 +613,7 @@ export default function BudgetPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Amount ($)</Label>
+                  <Label>Amount (₹)</Label>
                   <Input
                     type="number"
                     placeholder="0.00"
