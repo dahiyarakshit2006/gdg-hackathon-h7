@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   Calendar,
   Users,
-  DollarSign,
+  IndianRupee,
   TrendingUp,
   Plus,
   ArrowRight,
@@ -112,14 +112,14 @@ export default function HostDashboard() {
   }, [supabase]);
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-US", {
+    return new Intl.NumberFormat("en-IN", {
       style: "currency",
-      currency: "USD",
+      currency: "INR",
     }).format(amount);
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+    return new Date(dateString).toLocaleDateString("en-IN", {
       month: "short",
       day: "numeric",
       year: "numeric",
@@ -371,7 +371,7 @@ export default function HostDashboard() {
           <Card className="border-border hover:border-accent/50 transition-colors cursor-pointer h-full">
             <CardContent className="p-6 flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center">
-                <DollarSign className="w-6 h-6 text-accent" />
+                <IndianRupee className="w-6 h-6 text-accent" />
               </div>
               <div>
                 <p className="font-medium">Budget Manager</p>
