@@ -54,7 +54,11 @@ export default function ParticipantDashboard() {
 
   const { error } = await supabase
     .from('registrations')
-    .insert([{ event_id: eventId, user_id: user.id}]);
+    .insert([{ 
+  event_id: eventId, 
+  user_id: user.id, 
+  qr_code: `QR-${eventId}-${user.id.slice(0,5)}` // Dummy QR code string
+}]);
 
   if (error) alert("Registration failed: " + error.message);
   else alert("Successfully registered!");
