@@ -36,6 +36,8 @@ interface Event {
   max_capacity: number;
 }
 
+
+
 export default function HostDashboard() {
   const [stats, setStats] = useState<DashboardStats>({
     totalEvents: 0,

@@ -40,11 +40,14 @@ interface Registration {
   };
 }
 
+
+
 export default function ParticipantDashboard() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
+  const [availableEvents, setAvailableEvents] = useState<any[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -68,6 +71,8 @@ export default function ParticipantDashboard() {
     }
 
     // Fetch registrations with events
+    const { data: eventsData } = await supabase.from("events").select("*");
+if (eventsData) setAvailableEvents(eventsData);
     const { data: regs } = await supabase
       .from("registrations")
       .select("*, events(*)")
@@ -306,6 +311,27 @@ export default function ParticipantDashboard() {
           </Card>
         </Link>
       </div>
+
+      {/* Live Events Section */}
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+  {availableEvents.map((event) => (
+    <div key={event.id} className="p-4 border rounded-xl bg-card shadow-sm hover:border-primary/50 transition-colors">
+      <div className="flex justify-between items-start mb-2">
+        <h3 className="text-lg font-bold text-primary">{event.title}</h3>
+        <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">New</span>
+      </div>
+      <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
+        {event.description}
+      </p>
+      <button className="w-full bg-primary text-white py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-all">
+        Register for Event
+      </button>
+    </div>
+  ))}
+</div>
     </div>
   );
 }
+
+
+
