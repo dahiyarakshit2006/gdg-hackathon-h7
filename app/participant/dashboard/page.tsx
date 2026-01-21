@@ -48,6 +48,17 @@ export default function ParticipantDashboard() {
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
   const [availableEvents, setAvailableEvents] = useState<any[]>([]);
+  const handleRegister = async (eventId: string) => {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return alert("Please login first");
+
+  const { error } = await supabase
+    .from('registrations')
+    .insert([{ event_id: eventId, user_id: user.id, status: 'confirmed' }]);
+
+  if (error) alert("Registration failed: " + error.message);
+  else alert("Successfully registered!");
+};
 
   useEffect(() => {
     fetchData();
@@ -231,7 +242,7 @@ if (eventsData) setAvailableEvents(eventsData);
             <div className="text-center py-8">
               <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
               <p className="text-muted-foreground">No upcoming events</p>
-              <Link href="/participant/events">
+              <Link href="#all-events">
                 <Button className="mt-4 bg-transparent" variant="outline">
                   Browse Events
                 </Button>
@@ -314,6 +325,7 @@ if (eventsData) setAvailableEvents(eventsData);
 
       {/* Live Events Section */}
 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+  <h2 id="all-events" className="text-2xl font-bold mt-12 mb-6">Explore New Events</h2>
   {availableEvents.map((event) => (
     <div key={event.id} className="p-4 border rounded-xl bg-card shadow-sm hover:border-primary/50 transition-colors">
       <div className="flex justify-between items-start mb-2">
@@ -323,7 +335,7 @@ if (eventsData) setAvailableEvents(eventsData);
       <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
         {event.description}
       </p>
-      <button className="w-full bg-primary text-white py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-all">
+      <button onClick={()=> handleRegister(event.id)} className="w-full bg-primary text-white py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-all">
         Register for Event
       </button>
     </div>
