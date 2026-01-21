@@ -54,7 +54,7 @@ export default function ParticipantDashboard() {
 
   const { error } = await supabase
     .from('registrations')
-    .insert([{ event_id: eventId, user_id: user.id, status: 'confirmed' }]);
+    .insert([{ event_id: eventId, user_id: user.id}]);
 
   if (error) alert("Registration failed: " + error.message);
   else alert("Successfully registered!");
