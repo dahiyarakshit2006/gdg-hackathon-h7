@@ -68,102 +68,83 @@ export default function ParticipantEventsPage() {
   }, []);
 
   const fetchEvents = async () => {
-    setLoading(true);
+  setLoading(true);
 
-    // ✅ 1) Get logged in user
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
+  // ✅ 1) Get logged-in user
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
 
-    if (userError) {
-      console.log("User Error:", userError);
-      setLoading(false);
-      return;
-    }
-
-    // ✅ 2) Fetch profile (college_id)
-const { data: profile, error: profileError } = await supabase
-  .from("profiles")
-  .select("college_id")
-  .eq("id", user.id) // agar tumhare table me user_id hai toh id ki jagah user_id
-  .single();
-
-if (profileError) {
-  console.log("Profile Error:", profileError);
-  setLoading(false);
-  return;
-}
-
-if (!profile?.college_id) {
-  console.log("College ID missing in profile");
-  setLoading(false);
-  return;
-}
-
-
-    if (!user) {
-      console.log("No user found (not logged in)");
-      setEvents([]);
-      setRegisteredEvents([]);
-      setLoading(false);
-      return;
-    }
-
-    // ✅ 2) Get user's profile -> college_id
-    const { data: profile, error: profileError } = await supabase
-      .from("profiles")
-      .select("college_id")
-      .eq("id", user.id)
-      .single();
-
-    if (profileError) {
-      console.log("Profile Error:", profileError);
-      setLoading(false);
-      return;
-    }
-
-    if (!profile?.college_id) {
-      console.log("User profile has no college_id");
-      setEvents([]);
-      setRegisteredEvents([]);
-      setLoading(false);
-      return;
-    }
-
-    // ✅ 3) Fetch upcoming events ONLY for same college
-    const { data: eventsData, error: eventsError } = await supabase
-      .from("events")
-      .select("*, profiles(full_name)")
-      .eq("status", "upcoming")
-      .eq("college_id", profile.college_id)
-      .gte("event_date", new Date().toISOString())
-      .order("event_date", { ascending: true });
-
-    if (eventsError) {
-      console.log("Events Error:", eventsError);
-      setLoading(false);
-      return;
-    }
-
-    setEvents(eventsData || []);
-
-    // ✅ 4) Fetch user's registrations
-    const { data: regs, error: regsError } = await supabase
-      .from("registrations")
-      .select("event_id")
-      .eq("user_id", user.id)
-      .neq("status", "cancelled");
-
-    if (regsError) {
-      console.log("Registrations Error:", regsError);
-      setRegisteredEvents([]);
-    } else {
-      setRegisteredEvents((regs || []).map((r: any) => r.event_id));
-    }
-
+  if (userError) {
+    console.log("User Error:", userError);
     setLoading(false);
-  };
+    return;
+  }
+
+  if (!user) {
+    console.log("User not logged in");
+    setEvents([]);
+    setRegisteredEvents([]);
+    setLoading(false);
+    return;
+  }
+
+  // ✅ 2) Get user's profile (college_id)
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("college_id")
+    .eq("id", user.id)
+    .single();
+
+  if (profileError) {
+    console.log("Profile Error:", profileError);
+    setLoading(false);
+    return;
+  }
+
+  if (!profile?.college_id) {
+    console.log("college_id missing in profile");
+    setEvents([]);
+    setRegisteredEvents([]);
+    setLoading(false);
+    return;
+  }
+
+  // ✅ 3) Fetch upcoming events (same college only)
+  const { data: eventsData, error: eventsError } = await supabase
+    .from("events")
+    .select("*, profiles(full_name)")
+    .eq("status", "upcoming")
+    .eq("college_id", profile.college_id)
+    .gte("event_date", new Date().toISOString())
+    .order("event_date", { ascending: true });
+
+  if (eventsError) {
+    console.log("Events Error:", eventsError);
+    setLoading(false);
+    return;
+  }
+
+  setEvents(eventsData || []);
+
+  // ✅ 4) Fetch user's registrations
+  const { data: regs, error: regsError } = await supabase
+    .from("registrations")
+    .select("event_id")
+    .eq("user_id", user.id)
+    .neq("status", "cancelled");
+
+  if (regsError) {
+    console.log("Registrations Error:", regsError);
+    setRegisteredEvents([]);
+  } else {
+    setRegisteredEvents((regs || []).map((r: any) => r.event_id));
+  }
+
+  setLoading(false);
+};
+
 
   const handleRegister = async (event: Event) => {
     setRegistering(true);
