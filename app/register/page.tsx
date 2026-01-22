@@ -235,11 +235,19 @@ export default function RegisterPage() {
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="MIT">MIT</SelectItem>
-                      <SelectItem value="Stanford">Stanford</SelectItem>
-                      <SelectItem value="Harvard">Harvard</SelectItem>
-                      <SelectItem value="Berkeley">UC Berkeley</SelectItem>
-                      <SelectItem value="CalTech">CalTech</SelectItem>
+                      <SelectItem value="GTBIT">GTBIT</SelectItem>
+  <SelectItem value="USICT">USICT</SelectItem>
+  <SelectItem value="MAIT">MAIT</SelectItem>
+  <SelectItem value="MSIT">MSIT</SelectItem>
+  <SelectItem value="BPIT">BPIT</SelectItem>
+  <SelectItem value="BVP">BVP (Bharati Vidyapeeth)</SelectItem>
+  <SelectItem value="ADGITM">ADGITM</SelectItem>
+  <SelectItem value="HMRITM">HMRITM</SelectItem>
+  <SelectItem value="JIMS">JIMS</SelectItem>
+  <SelectItem value="VIPS">VIPS</SelectItem>
+  <SelectItem value="USAR">USAR</SelectItem>
+  <SelectItem value="USMS">USMS</SelectItem>
+  <SelectItem value="USLLS">USLLS</SelectItem>
                       <SelectItem value="Other">Other</SelectItem>
                     </SelectContent>
                   </Select>
